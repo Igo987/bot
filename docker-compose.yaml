@@ -1,0 +1,50 @@
+version: "3.8"
+services:
+  db:
+    container_name: db-container
+    image: postgres:alpine3.19
+    restart: always
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    # network_mode: host
+    ports:
+      - 5432:5432
+    networks:
+      - ch_network
+    # host.docker.internal
+    environment:
+      POSTGRES_HOST: host.docker.internal
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 8904345
+      POSTGRES_DB: postgres
+
+  app:
+    restart: always
+    container_name: app
+    image: app
+    build:
+      context: .
+      # volumes:
+      #   -   ./app:/app
+      dockerfile: ./Dockerfile
+    ports:
+      - 8000:8000
+    networks:
+      - ch_network
+    depends_on:
+      - db
+
+networks:
+  ch_network:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
+  
